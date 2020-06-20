@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>Demo</title>
+  <meta name="author" content="Ally Chen">
+  <meta name="description" content="資源回收小練習">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="">
+  <link rel="icon" type="image/x-icon" href="" />
+
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+  <div class="page" id="app">
+    <header>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html" class="active">首頁</a></li>
+          <li><a href="#">關於我們</a></li>
+        </ul>
+      </nav>
+      <p class="result"><span class="correct">正確：{{corrects}}</span>
+        <span class="wrong">錯誤：{{wrongs}}</span></p>
+    </header>
+    <main>
+      <div class="yard">
+        <div :id="`sec-${sec.id}`" v-for="sec in garbage_types" :style="`background-color:${sec.bg}`">
+          <div class="text">
+            <h3>{{sec.type_name}}</h3>
+          </div>
+          <img :src="`assets/i-${sec.id}.png`" class="img-type">
+
+        </div>
+        <div class="garbage">
+          <img v-for="g in garbage_items" class="garbage-item item" :id="`item-${g.id}`" :data-type="g.type" :data-id="g.id" :src="`assets/g/garbage_${g.id}.png`" :title="g.name">
+        </div>
+      </div>
+      <transition name="fade">
+        <div v-if="error.text">
+          <div class="error" :style="`position:fixed;left:${error.x}px;top:${error.y}px`">
+            {{error.text}}
+          </div>
+        </div>
+      </transition>
+      <transition name="fade">
+        <div v-if="msg" class="wrap">
+            <div @click="msg=''" class="overlay"></div>
+            <div class="content">
+              <span class="close" @click="msg=''"></span>
+              <div v-html="msg"></div>
+            </div>
+        </div>
+      </transition>
+
+    </main>
+  </div>
+  <!--  <a href="https://www.vecteezy.com/free-vector/garbage">Garbage Vectors by Vecteezy</a>-->
+  <!--  <a href="https://www.vecteezy.com/free-vector/recycle">Recycle Vectors by Vecteezy</a>-->
+  <!--  <a href="https://www.vecteezy.com/free-vector/plastic-pack">Plastic Pack Vectors by Vecteezy</a>-->
+  <!--  <a href="https://www.vecteezy.com/free-vector/rubbish">Rubbish Vectors by Vecteezy</a>-->
+  <script src="assets/interact.min.js" type="text/javascript"></script>
+  <script src="assets/vue.min.js" type="text/javascript"></script>
+  <script src="assets/recycle.js" type="text/javascript"></script>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        garbage_types: [],
+        garbage_items: [],
+        currentG: 0,
+        currentCofG: 0,
+        currentC: 0,
+        corrects: 0,
+        wrongs: 0,
+        msg: '',
+        error:{}
+      },
+      created: function() {
+        var items = this.garbage_items
+        var gid = Object.keys(garbage)
+        var g = Object.values(garbage)
+        var t = Object.values(garbage_type)
+        
+        g = g.map((n,i)=>{n.id = gid[i];return n})
+        
+        // pick 10 items randomly
+        while (items.length < 10) {
+          var pick = g[Math.floor(Math.random() * g.length)];
+          if (!items.find((n) => n == pick)) {
+            items.push(pick)
+          }
+        }
+        
+        // 若有新增分類則須於下方陣列新增中文名稱與背景色
+        const colors = ['#f6d9c5','#c7ddfa','#bdbdbd','#a9c3ac','#f9c6c6','#cdc0e0','#e6c8ad','#f2f0db','#dbdbdb','#c8e1dc','#fffca5','#dee6b8','#b5c2d9'];
+        const display_name = ['塑膠類','保特瓶','鐵鋁罐','一般垃圾','廚餘','二手品','紙箱','餐盒','利樂包','書報','保麗龍','樹枝葉','玻璃']
+        
+        // render garbage types
+        this.garbage_types = t.map((n,i)=> {
+          n = {
+            id: n,
+            type_name: display_name[i],
+            bg: colors[i]
+          }
+          return n;
+        })
+      },
+      mounted: function() {
+        const t = this;
+        
+        // drag function
+        interact('.item')
+          .draggable({
+            inertia: true,
+            modifiers: [
+              interact.modifiers.restrictRect({
+                restriction: 'main',
+                endOnly: true
+              })
+            ],
+            autoScroll: true,
+            listeners: {
+              start: function(e) {
+                e.target.classList.remove("ani")
+                t.currentG = e.target.getAttribute('data-id')
+                t.currentCofG = e.target.getAttribute('data-type')
+              },
+              move: dragMoveListener,
+              end: function(e) {
+                e.target.classList.add("ani")
+                e.target.style.transform = 'translate(0px, 0px)'
+                e.target.setAttribute('data-x', 0)
+                e.target.setAttribute('data-y', 0)
+                
+                if(!t.ifInBox(e.pageX, e.pageY,document.querySelector('.garbage')) || window.innerWidth < 768){
+                  
+                  // 儲存拖曳終點當下的位置之分類
+                  t.currentC = t.garbage_types.find((c) => t.ifInBox(e.pageX, e.pageY, document.getElementById(`sec-${c.id}`))).id
+                  
+                  t.msg = t.getMsg(t.currentG,t.currentC)
+                  
+                  // message fade out
+                  setTimeout(function(){t.msg = ''},1000)
+                }
+                
+                
+                if (t.currentCofG == t.currentC) {
+                  e.target.classList.remove('item')
+                  var container = '#sec-' + e.target.getAttribute('data-type')
+                  document.querySelector(container).appendChild(e.target)
+                  t.corrects += 1
+                  
+                  if (t.corrects==10){
+                    setTimeout(function(){
+                      t.msg = `<p>您失誤<span class="error">${t.wrongs}</span>次後成功分類完成</p>`
+                    },1500)
+                  }
+                  
+                } else {
+                  t.wrongs += 1
+                }
+              }
+            }
+          })
+
+        function dragMoveListener(event) {
+          var target = event.target
+          var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+          var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+          target.style.webkitTransform =
+            target.style.transform =
+            'translate(' + x + 'px, ' + y + 'px)'
+
+          target.setAttribute('data-x', x)
+          target.setAttribute('data-y', y)
+          
+        }
+      },
+      methods: {
+        getMsg:function(id,type){
+          if(type == garbage[id].type){
+              return garbage[id].name +" " + garbage[id].correct_message
+          }else{
+              return garbage[id].name +" " + garbage[id].false_message
+          }
+        },
+        getElementPosition: function(element) {
+          var top = 0,
+            left = 0,
+            w = element.offsetWidth,
+            h = element.offsetHeight;
+
+          do {
+            top += element.offsetTop || 0;
+            left += element.offsetLeft || 0;
+            element = element.offsetParent;
+          } while (element);
+
+          return {
+            top: top,
+            left: left,
+            right: left + w,
+            bottom: top + h
+          };
+        },
+        ifInBox: function(x, y, container) {
+          var l = this.getElementPosition(container).left,
+            r = this.getElementPosition(container).right,
+            t = this.getElementPosition(container).top,
+            b = this.getElementPosition(container).bottom;
+
+          if (x > l && x < r && y > t && y < b) {
+            return true
+          } else {
+            return false
+          }
+        },
+      }
+    })
+  </script>
+  <script>
+    window.onload = rerenderSize
+    window.addEventListener('resize', rerenderSize)
+    
+    function rerenderSize(){
+      if (window.innerWidth < 768) {
+        document.querySelector('main').style.paddingTop = document.querySelector('header').offsetHeight + 'px';
+      }
+      if (window.innerWidth < 1200) {
+        document.querySelector('.yard').style.paddingBottom = document.querySelector('.garbage').offsetHeight + 'px';
+      }
+    }
+  </script>
+</body>
+
+</html>
