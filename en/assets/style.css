@@ -403,6 +403,15 @@ main {
   color: var(--muted);
 }
 
+.game-hero,
+.scene-hero {
+  display: block;
+  width: min(100%, 640px);
+  margin: 18px auto 0;
+  border-radius: 24px;
+  box-shadow: 0 12px 26px rgba(23, 59, 53, .12);
+}
+
 .yard {
   gap: 10px;
   padding: 10px;
