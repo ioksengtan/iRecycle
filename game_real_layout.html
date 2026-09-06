@@ -8,7 +8,6 @@
   
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="assets/vue.min.js" type="text/javascript"></script>
   <title>Recycle Page</title>
 </head>
 <body>
@@ -16,14 +15,20 @@
     <header>
       <nav>
         <ul class="menu">
-          <li><a href="index.html" class="active">首頁</a></li>
-		  <li><a href="game.html">互動遊戲</a></li>
+          <li><a href="index.html">首頁</a></li>
+		  <li><a href="en/index.html">互動遊戲</a></li>
 					          
-          <li><a href="#">關於我們</a></li>
+          <li><a href="README.md">關於專案</a></li>
         </ul>
       </nav>
     </header>
     <section>
+      <div class="scene-heading">
+        <span>互動遊戲 02</span>
+        <h1>生活場域分類</h1>
+        <p>看看不同生活空間裡，物品應該被放到哪一個回收區。</p>
+        <img class="scene-hero" src="assets/scene-sort-hero.svg" alt="房屋、樹木與回收箱的插畫">
+      </div>
       <div class="recycle-content__4">
         <div class="title">第四區</div>
         <div class="recycle-content">
@@ -109,7 +114,8 @@
       </div>
     </section>
     <div class="game-rule">
-      這裡要放遊戲規則
+      <h2>遊戲規則</h2>
+      <p>將下方物品拖曳到你認為正確的回收區。答對會累積正確次數，答錯會顯示提示；點擊物品或回收區也能查看分類說明。</p>
     </div>
   </main>
   <div class="popup">

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="zh-Hant">
 
 <head>
   <meta charset="utf-8">
-  <title>Demo</title>
+  <title>iRecycle｜垃圾分類挑戰</title>
   <meta name="author" content="Ally Chen">
   <meta name="description" content="資源回收小練習">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,14 +18,20 @@
     <header>
       <nav>
         <ul class="menu">
-          <li><a href="index.html" class="active">首頁</a></li>
-          <li><a href="#">關於我們</a></li>
+          <li><a href="../index.html">首頁</a></li>
+          <li><a href="../README.md">關於專案</a></li>
         </ul>
       </nav>
       <p class="result"><span class="correct">正確：{{corrects}}</span>
         <span class="wrong">錯誤：{{wrongs}}</span></p>
     </header>
     <main>
+      <div class="game-heading">
+        <span>互動遊戲 01</span>
+        <h1>垃圾分類挑戰</h1>
+        <p>拖曳每件物品到正確的分類區。完成後，你會看到自己的分類表現。</p>
+        <img class="game-hero" src="assets/game-sort-hero.svg" alt="回收桶與角色分類垃圾的插畫">
+      </div>
       <div class="yard">
         <div :id="`sec-${sec.id}`" v-for="sec in garbage_types" :style="`background-color:${sec.bg}`">
           <div class="text">
@@ -86,6 +92,7 @@
         var t = Object.values(garbage_type)
         
         g = g.map((n,i)=>{n.id = gid[i];return n})
+          .filter((n) => Number(n.id) <= 16)
         
         // pick 10 items randomly
         while (items.length < 10) {
@@ -135,28 +142,26 @@
                 e.target.style.transform = 'translate(0px, 0px)'
                 e.target.setAttribute('data-x', 0)
                 e.target.setAttribute('data-y', 0)
-                
-                if(!t.ifInBox(e.pageX, e.pageY,document.querySelector('.garbage')) || window.innerWidth < 768){
-                  
-                  // 儲存拖曳終點當下的位置之分類
-                  t.currentC = t.garbage_types.find((c) => t.ifInBox(e.pageX, e.pageY, document.getElementById(`sec-${c.id}`))).id
-                  
-                  t.msg = t.getMsg(t.currentG,t.currentC)
-                  
-                  // message fade out
-                  setTimeout(function(){t.msg = ''},1000)
+
+                var targetCategory = t.garbage_types.find(function(c) {
+                  return t.ifInBox(e.pageX, e.pageY, document.getElementById('sec-' + c.id))
+                })
+                if (!targetCategory) {
+                  return
                 }
-                
-                
-                if (t.currentCofG == t.currentC) {
+                t.currentC = targetCategory.id
+                t.msg = t.getMsg(t.currentG, t.currentC)
+                setTimeout(function(){ t.msg = '' }, 2500)
+
+              if (t.currentCofG == t.currentC) {
                   e.target.classList.remove('item')
                   var container = '#sec-' + e.target.getAttribute('data-type')
                   document.querySelector(container).appendChild(e.target)
                   t.corrects += 1
                   
-                  if (t.corrects==10){
+                  if (t.corrects==t.garbage_items.length){
                     setTimeout(function(){
-                      t.msg = `<p>您失誤<span class="error">${t.wrongs}</span>次後成功分類完成</p>`
+                      t.msg = `<p>恭喜完成分類！你失誤<span class="error">${t.wrongs}</span>次。</p>`
                     },1500)
                   }
                   
