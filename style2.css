@@ -418,7 +418,7 @@ header {
 section {
   flex-wrap: wrap;
   gap: 8px;
-  padding: 28px 18px 220px;
+  padding: 18px 18px 150px;
   background: linear-gradient(145deg, #f7fcf9, #eaf6ef);
 }
 
@@ -449,9 +449,28 @@ section {
 
 .scene-hero {
   width: min(100%, 900px);
-  margin: 18px auto 0;
+  height: clamp(76px, 11vw, 118px);
+  margin: 10px auto 0;
+  object-fit: cover;
+  object-position: center;
   border-radius: 24px;
   box-shadow: 0 12px 26px rgba(23, 59, 53, .12);
+}
+
+@media (min-width: 768px) {
+  section {
+    padding-top: 12px;
+  }
+
+  .recycle-content__4,
+  .recycle-content__3 {
+    height: clamp(240px, 36vh, 330px);
+  }
+
+  .recycle-content__2,
+  .recycle-content__1 {
+    height: clamp(220px, 32vh, 290px);
+  }
 }
 
 .title {

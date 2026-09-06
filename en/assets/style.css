@@ -407,7 +407,10 @@ main {
 .scene-hero {
   display: block;
   width: min(100%, 640px);
-  margin: 18px auto 0;
+  height: clamp(86px, 13vw, 132px);
+  margin: 12px auto 0;
+  object-fit: cover;
+  object-position: center;
   border-radius: 24px;
   box-shadow: 0 12px 26px rgba(23, 59, 53, .12);
 }
@@ -416,11 +419,36 @@ main {
   gap: 10px;
   padding: 10px;
   border: 0;
+  min-height: 0;
 }
 
 @media (min-width: 768px) {
   .game-heading {
-    margin-bottom: 0;
+    margin: 12px auto 0;
+  }
+
+  .game-heading p {
+    font-size: .95rem;
+  }
+
+  .yard > div {
+    min-height: clamp(110px, 16vh, 190px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .page {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .yard > div {
+    width: 20%;
+    min-height: clamp(105px, 14vh, 150px);
+  }
+
+  .yard .garbage {
+    max-height: 210px;
   }
 }
 
