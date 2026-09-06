@@ -2,14 +2,14 @@ var correct = 0
 var warning = 0
 var correctNumber = 10
 var garbageNumber = 10
-var allCorrectMessage = "<p> test bal bal bal</p> <button class='reload-button'> 重新開始 <img src='https://cdn0.iconfinder.com/data/icons/glyphpack/41/refresh-512.png' > </button>"
+var allCorrectMessage = "<p>恭喜你，全部分類完成！</p> <button class='reload-button'>重新開始</button>"
 
 // 設定回收區塊的圖片
 function setGarbageBlockImage() {
   Object.keys(garbageBlock).forEach(function (key){
     var className = '.garbage-recycle-block__' + key
     var value = garbageBlock[key].type
-    var imgHtml = '<img src="./assets/garbage-block/' + value + '.JPG"/>'
+    var imgHtml = '<img src="./assets/garbage-block/' + value + '.JPG" alt="' + value + '"/>'
     $(className).append(imgHtml)
   })
 }
@@ -28,7 +28,7 @@ function getRandomGarbage() {
 }
 
 function createGarbage(garbageId, garbageType) {
-  var imgHtml = '<img src="./assets/garbage/garbage_' + garbageId + '.JPG" data-garbageId="' + garbageId + '"/>'
+  var imgHtml = '<img src="./assets/garbage/garbage_' + garbageId + '.jpg" data-garbageId="' + garbageId + '" alt="' + garbage[garbageId].name + '"/>'
   return '<div class="garbage-item" data-garbageTypeId="' + garbageType + '" data-garbageId="' + garbageId + '">' + imgHtml + '</div>'
 }
 
@@ -86,7 +86,7 @@ function init() {
     })
     .click(function() {
       var garbageRecycleId = $(this).attr("data-garbageRecycleId")
-      var garbageId = $(event.target).attr("data-garbageId")
+      var garbageId = $(this).find("[data-garbageId]").first().attr("data-garbageId")
       
       if (garbageId) {
         garbageInfoPopup(garbageId)
@@ -146,5 +146,5 @@ function garbageRecyclePopup(garbageRecycleId) {
 }
 
 $(document).ready(function() {
-	init();
+  init();
 });
