@@ -28,8 +28,8 @@ function getRandomGarbage() {
 }
 
 function createGarbage(garbageId, garbageType) {
-  var imgHtml = '<img src="./assets/garbage/garbage_' + garbageId + '.jpg" data-garbageId="' + garbageId + '" alt="' + garbage[garbageId].name + '"/>'
-  return '<div class="garbage-item" data-garbageTypeId="' + garbageType + '" data-garbageId="' + garbageId + '">' + imgHtml + '</div>'
+  var imgHtml = '<img src="./assets/garbage/garbage_' + garbageId + '.jpg" data-garbage-id="' + garbageId + '" alt="' + garbage[garbageId].name + '"/>'
+  return '<div class="garbage-item" data-garbage-type-id="' + garbageType + '" data-garbage-id="' + garbageId + '">' + imgHtml + '</div>'
 }
 
 function getRandomInt(max) {
@@ -51,7 +51,7 @@ function init() {
   $(".garbage-item")
     .draggable({ revert: true, })
     .click(function() {
-      var garbageId = $(this).attr("data-garbageId")
+      var garbageId = $(this).attr("data-garbage-id")
       garbageInfoPopup(garbageId)
     })
 
@@ -60,11 +60,11 @@ function init() {
       hoverClass: "garbage-recycle--hover",
       drop: function( event, ui ) {
         var garbage = ui.draggable
-        var garbageId = garbage.attr("data-garbageId") // 垃圾的 ID
-        var garbageTypeId = garbage.attr("data-garbageTypeId") // 垃圾對應的回收 ID
-        var garbageRecycleId = $(this).attr("data-garbageRecycleId") // 垃圾回收區塊的 ID
+        var garbageId = garbage.attr("data-garbage-id") // 垃圾的 ID
+        var garbageTypeId = garbage.attr("data-garbage-type-id") // 垃圾對應的回收 ID
+        var garbageRecycleId = $(this).attr("data-garbage-recycle-id") // 垃圾回收區塊的 ID
 
-        if (garbageTypeId === garbageRecycleId) {
+        if (String(garbageTypeId) === String(garbageRecycleId)) {
           garbage.hide()
 
           setCountText(true)
@@ -85,8 +85,8 @@ function init() {
       }
     })
     .click(function() {
-      var garbageRecycleId = $(this).attr("data-garbageRecycleId")
-      var garbageId = $(this).find("[data-garbageId]").first().attr("data-garbageId")
+      var garbageRecycleId = $(this).attr("data-garbage-recycle-id")
+      var garbageId = $(this).find("[data-garbage-id]").first().attr("data-garbage-id")
       
       if (garbageId) {
         garbageInfoPopup(garbageId)
