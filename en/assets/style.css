@@ -179,6 +179,64 @@ main {
     display: none;
   }
 }
+
+@media (min-width: 768px) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .page {
+    height: 100dvh;
+    min-height: 560px;
+  }
+
+  .page main {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .game-heading {
+    flex: 0 0 auto;
+    margin: 8px auto 0;
+  }
+
+  .game-heading h1 {
+    font-size: clamp(1.45rem, 3vw, 2.1rem);
+  }
+
+  .game-hero {
+    height: clamp(58px, 9vh, 86px);
+    margin-top: 6px;
+  }
+
+  .yard {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    padding: 6px 6px 112px;
+  }
+
+  .yard > div {
+    min-height: 0;
+  }
+
+  .yard .garbage {
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    width: auto;
+    height: 100px;
+    min-height: 0;
+    padding: 6px;
+  }
+
+  .yard .garbage-item {
+    max-height: 76px;
+  }
+}
 @media (min-width: 1200px) {
   .yard .garbage {
     box-shadow: none;

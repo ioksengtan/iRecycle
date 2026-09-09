@@ -41,7 +41,7 @@
 
         </div>
         <div class="garbage">
-          <img v-for="g in garbage_items" class="garbage-item item" :id="`item-${g.id}`" :data-type="g.type" :data-id="g.id" :src="`assets/g/garbage_${g.id}.png`" :title="g.name">
+          <img v-for="g in garbage_items" class="garbage-item item" :id="`item-${g.id}`" :data-type="g.type" :data-id="g.id" :src="`../assets/garbage/garbage_${g.id}.jpg`" :title="g.name">
         </div>
       </div>
       <transition name="fade">
