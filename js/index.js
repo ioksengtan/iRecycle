@@ -49,7 +49,16 @@ function init() {
   })
   
   $(".garbage-item")
-    .draggable({ revert: true, })
+    .draggable({
+      revert: true,
+      addClasses: false,
+      start: function() {
+        $(this).addClass("is-dragging")
+      },
+      stop: function() {
+        $(this).removeClass("is-dragging")
+      }
+    })
     .click(function() {
       var garbageId = $(this).attr("data-garbage-id")
       garbageInfoPopup(garbageId)
