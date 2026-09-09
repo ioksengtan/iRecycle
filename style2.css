@@ -571,3 +571,84 @@ section {
     display: none;
   }
 }
+
+@media (min-width: 768px) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .content {
+    height: 100dvh;
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content > section {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    margin-top: 0;
+    padding: 6px 12px 94px;
+  }
+
+  .scene-heading {
+    padding-bottom: 4px;
+  }
+
+  .scene-heading h1 {
+    font-size: clamp(1.45rem, 3vw, 2.1rem);
+  }
+
+  .scene-heading p {
+    font-size: .9rem;
+  }
+
+  .scene-hero {
+    height: clamp(48px, 7vh, 72px);
+    margin-top: 4px;
+  }
+
+  .recycle-content__4,
+  .recycle-content__3,
+  .recycle-content__2,
+  .recycle-content__1 {
+    height: auto;
+    min-height: 0;
+    flex: 1 1 0;
+  }
+
+  .title {
+    font-size: clamp(1rem, 2vw, 1.45rem);
+  }
+
+  .garbage {
+    left: 12px;
+    right: 12px;
+    bottom: 6px;
+    width: auto;
+    height: 82px;
+    min-height: 0;
+  }
+
+  .garbage-item {
+    max-height: 58px;
+  }
+
+  .content > .game-rule {
+    flex: 0 0 auto;
+    max-height: 64px;
+    overflow: hidden;
+    margin: 4px auto;
+    padding: 5px 18px;
+    font-size: .8rem;
+  }
+
+  .game-rule h2 {
+    display: inline;
+    margin-right: 8px;
+    font-size: .95rem;
+  }
+}
